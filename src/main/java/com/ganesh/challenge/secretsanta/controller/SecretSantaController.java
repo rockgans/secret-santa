@@ -35,7 +35,7 @@ public class SecretSantaController {
      * @param family
      */
     @RequestMapping(value = "/family", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void assignSantas(@RequestBody Family family) {
 
         secretSantaService.populateSecretSanta(family);
