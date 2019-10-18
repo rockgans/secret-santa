@@ -4,6 +4,8 @@ import com.ganesh.challenge.secretsanta.domain.Family;
 import com.ganesh.challenge.secretsanta.exception.EmptyFamilyMemberListException;
 import com.ganesh.challenge.secretsanta.exception.InvalidInputException;
 import com.ganesh.challenge.secretsanta.service.SecretSantaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 public class SecretSantaController {
+
+    private final static Logger logger = LoggerFactory.getLogger(com.ganesh.challenge.secretsanta.controller.SecretSantaController.class);
 
     @Autowired
     private SecretSantaService secretSantaService;
@@ -77,14 +81,19 @@ public class SecretSantaController {
 
 
     /**
-     * Common Exception handler for InvalidInputException
+     * Common Exception handler for uncaught exception
      * @param re
      * @return
      */
-    @ResponseStatus(value=HttpStatus.SERVICE_UNAVAILABLE, reason="Something went Wrong !")
+    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR, reason="Something went Wrong !")
     @ExceptionHandler(Throwable.class)
-    public String handleAllException(Throwable re) {
-        return re.getMessage();
+    public void handleAllException(Throwable re) {
+
+        logger.error("server error {}", re.getMessage());
+        if(logger.isDebugEnabled()){
+            logger.debug(re.getStackTrace().toString());
+        }
+
     }
 
 
